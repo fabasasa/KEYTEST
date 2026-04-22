@@ -1115,6 +1115,11 @@
     </div>
   </div>
 
+  <!-- Miracle Overlay for Jesus Easter Egg -->
+  <div id="miracle-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
+    <img src="jesus.gif" alt="It's a miracle" style="max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 0 50px rgba(78,201,144,0.6); animation: chipIn 0.3s ease;">
+  </div>
+
   <script>
     /*
      * ██╗  ██╗███████╗██╗   ██╗████████╗███████╗███████╗████████╗
@@ -1292,6 +1297,22 @@
 
       // Check for trigger words
       const bufferLower = typingBuffer.toLowerCase();
+
+      // Jesus Miracle Easter Egg
+      if (bufferLower.endsWith('jesus')) {
+        const overlay = document.getElementById('miracle-overlay');
+        if (overlay && overlay.style.display !== 'flex') {
+          overlay.style.display = 'flex';
+          setTimeout(() => {
+            overlay.style.display = 'none';
+          }, 3000);
+          typingBuffer = ''; // Clear buffer to prevent instant re-trigger
+          const textEl = document.getElementById('typing-text');
+          if (textEl) textEl.textContent = '';
+          markTriggerFound('jesus');
+        }
+      }
+
       for (const [word, response] of Object.entries(wordTriggers)) {
         if (bufferLower.endsWith(word) && !foundWords.has(word)) {
           foundWords.add(word);
