@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KeyTest — Tester de Teclado Profesional</title>
+  <meta name="description" content="Herramienta profesional para testear todas las teclas de tu teclado.">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+    rel="stylesheet">
+  <!-- GOOGLE ADSENSE: Descomentar y reemplazar ca-pub-XXXXXXXXXXXXXXXX con tu ID de publicador -->
+  <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> -->
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* Un programador entra a un bar y pide 1.0000000000000002 cervezas. El barman dice: "¿error de punto flotante?" */
+    :root {
+      --bg: #1b1c20;
+      --surface: #232429;
+      --surface2: #2a2b31;
+      --border: #36373e;
+      --border2: #44454d;
+      --accent: #4ec990;
+      --accent2: #3aad76;
+      --accent-dim: rgba(78, 201, 144, 0.08);
+      --accent-glow: rgba(78, 201, 144, 0.2);
+      --text: #e8e9ec;
+      --text2: #a0a1a8;
+      --text3: #666770;
+      --key-bg: #2c2d33;
+      --key-border: #404148;
+      --key-text: #c8c9ce;
+      --pressed: #4ec990;
+      --pressed-bg: rgba(78, 201, 144, 0.12);
+      --tested: rgba(78, 201, 144, 0.1);
+      --tested-border: rgba(78, 201, 144, 0.45);
+      --red: #e05565;
+      --yellow: #e0b840;
+      --blue: #5090d0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* No background pattern - clean solid */
+
+    .page-wrapper {
+      display: flex;
+      gap: 1rem;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .ad-sidebar {
+      width: 160px;
+      flex-shrink: 0;
+    }
+
+    .ad-sidebar-slot {
+      width: 160px;
+      min-height: 600px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text3);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      position: sticky;
+      top: 1rem;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      min-width: 0;
+      padding: 1rem 1rem 3rem;
+    }
+
+    .ad-banner {
+      width: 100%;
+      min-height: 90px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text3);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.25rem;
+    }
+
+    .ad-banner-bottom {
+      margin-top: 1.5rem;
+      margin-bottom: 0;
+    }
+
+    .ad-inline {
+      width: 100%;
+      min-height: 90px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text3);
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1.25rem;
+    }
+
+    @media (max-width: 1200px) {
+      .ad-sidebar {
+        display: none;
+      }
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .logo-name {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .logo-tag {
+      font-size: 0.6rem;
+      color: var(--text2);
+      border: 1px solid var(--border2);
+      padding: 2px 7px;
+      border-radius: 3px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 500;
+      background: var(--surface2);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
+    }
+
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.75rem;
+      padding: 0.45rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--text2);
+    }
+
+    .btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .btn-accent {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    .btn-accent:hover {
+      background: var(--accent2);
+      border-color: var(--accent2);
+      color: #fff;
+    }
+
+    /* Stats bar */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1rem;
+    }
+
+    .stat-label {
+      font-size: 0.65rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.3rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .stat-value.green {
+      color: var(--accent);
+    }
+
+    .stat-value.yellow {
+      color: var(--yellow);
+    }
+
+    .stat-value.red {
+      color: var(--red);
+    }
+
+    /* Key info panel */
+    .info-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      min-height: 64px;
+    }
+
+    .info-main {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .info-keyname {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .info-keyname.idle {
+      color: var(--text3);
+      font-weight: 400;
+      font-size: 0.85rem;
+    }
+
+    .info-details {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .info-item-label {
+      font-size: 0.62rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .info-item-value {
+      font-size: 0.85rem;
+      color: var(--text2);
+      font-weight: 600;
+    }
+
+    .info-item-value.active {
+      color: var(--accent);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text3);
+      display: inline-block;
+      margin-right: 6px;
+      transition: all 0.15s;
+    }
+
+    .status-dot.active {
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent-glow);
+    }
+
+    /* Section titles */
+    .section-label {
+      font-size: 0.65rem;
+      color: var(--text3);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.6rem;
+    }
+
+    /* KEYBOARD */
+    .keyboard-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.75rem;
+      overflow: hidden;
+    }
+
+    .keyboard-scaler {
+      transform-origin: top left;
+    }
+
+    .keyboard {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: max-content;
+    }
+
+    .kb-row {
+      display: flex;
+      gap: 4px;
+      align-items: flex-end;
+    }
+
+    /* Keys */
+    .key {
+      background: var(--key-bg);
+      border: 1px solid var(--key-border);
+      border-bottom: 2px solid #1a1b1f;
+      border-radius: 5px;
+      height: 40px;
+      min-width: 40px;
+      padding: 0 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      cursor: default;
+      transition: background 0.08s, border-color 0.08s, color 0.08s, transform 0.05s;
+      user-select: none;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .key .top-label {
+      font-size: 9px;
+      color: var(--text3);
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 600;
+    }
+
+    .key .main-label {
+      font-size: 11px;
+      color: var(--key-text);
+      font-weight: 700;
+      line-height: 1;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .key.wide {
+      min-width: 62px;
+    }
+
+    .key.wider {
+      min-width: 84px;
+    }
+
+    .key.widest {
+      min-width: 100px;
+    }
+
+    .key.space {
+      min-width: 271px;
+    }
+
+    .key.backspace {
+      min-width: 84px;
+    }
+
+    .key.tab {
+      min-width: 62px;
+    }
+
+    .key.caps {
+      min-width: 73px;
+    }
+
+    .key.enter {
+      min-width: 95px;
+    }
+
+    .key.lshift {
+      min-width: 95px;
+    }
+
+    .key.rshift {
+      min-width: 117px;
+    }
+
+    .key.lctrl,
+    .key.rctrl {
+      min-width: 51px;
+    }
+
+    .key.lalt,
+    .key.ralt {
+      min-width: 51px;
+    }
+
+    .key.meta {
+      min-width: 51px;
+    }
+
+    .key.fn-wide {
+      min-width: 52px;
+    }
+
+    .key.fn-sm {
+      height: 30px;
+      min-width: 35px;
+    }
+
+    .key.tested {
+      background: var(--tested);
+      border-color: var(--tested-border);
+      border-bottom-color: var(--accent2);
+    }
+
+    .key.tested .main-label,
+    .key.tested .top-label {
+      color: var(--accent2);
+    }
+
+    .key.pressed {
+      background: var(--pressed-bg);
+      border-color: var(--accent);
+      border-bottom-color: var(--accent2);
+      transform: translateY(1px);
+    }
+
+    .key.pressed .main-label,
+    .key.pressed .top-label {
+      color: var(--pressed);
+    }
+
+    .key.caps-on {
+      background: rgba(160, 133, 32, 0.1);
+      border-color: rgba(160, 133, 32, 0.4);
+    }
+
+    .key.caps-on .main-label {
+      color: var(--yellow);
+    }
+
+    /* Special LED dot on CapsLock */
+    .key.caps-led::after {
+      content: '';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--text3);
+      transition: background 0.2s;
+    }
+
+    .key.caps-led.caps-on::after {
+      background: var(--yellow);
+      box-shadow: 0 0 4px rgba(160, 133, 32, 0.5);
+    }
+
+    /* Spacer between groups */
+    .kb-gap {
+      width: 6px;
+      flex-shrink: 0;
+    }
+
+    .kb-gap-sm {
+      width: 3px;
+      flex-shrink: 0;
+    }
+
+    /* Last key info log */
+    .log-section {
+      margin-bottom: 1.75rem;
+    }
+
+    .log-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 6px;
+      max-height: 160px;
+      overflow-y: auto;
+    }
+
+    .log-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 8px;
+      font-size: 0.7rem;
+      color: var(--text2);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      animation: chipIn 0.15s ease;
+    }
+
+    @keyframes chipIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .log-chip .lc-key {
+      font-weight: 700;
+      color: var(--text);
+      font-size: 0.78rem;
+    }
+
+    .log-chip .lc-code {
+      color: var(--text3);
+      font-size: 0.62rem;
+    }
+
+    .log-grid::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    .log-grid::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .log-grid::-webkit-scrollbar-thumb {
+      background: var(--border2);
+      border-radius: 2px;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      margin-bottom: 1.75rem;
+    }
+
+    .progress-bar-bg {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      height: 8px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius: 8px;
+      transition: width 0.4s ease;
+    }
+
+    .progress-label {
+      font-size: 0.7rem;
+      color: var(--text2);
+      margin-top: 0.4rem;
+    }
+
+    /* Sound toggle */
+    .toggle-row {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.75rem;
+      align-items: center;
+    }
+
+    .toggle-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--text2);
+      cursor: pointer;
+    }
+
+    .toggle-item input {
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .toggle-item label {
+      cursor: pointer;
+    }
+
+    /* Held keys section */
+    .held-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      min-height: 38px;
+      align-items: center;
+    }
+
+    .held-chip {
+      background: var(--accent-dim);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      animation: chipIn 0.1s ease;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: var(--text3);
+      font-size: 0.65rem;
+      letter-spacing: 0.02em;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border);
+    }
+
+    /* Word Detector */
+    .word-section {
+      margin-bottom: 1.75rem;
+    }
+
+    .typing-display {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 0.8rem 1rem;
+      margin-top: 0.6rem;
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+      overflow: hidden;
+    }
+
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.1em;
+      background: var(--accent);
+      animation: blink 1s step-end infinite;
+      vertical-align: middle;
+    }
+
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+
+    .typing-text {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--text);
+      word-break: break-all;
+    }
+
+    .typing-placeholder {
+      font-size: 0.8rem;
+      color: var(--text3);
+    }
+
+    .word-toast {
+      position: fixed;
+      top: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--accent);
+      color: #fff;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      z-index: 9999;
+      animation: toastIn 0.3s ease, toastOut 0.3s ease 2.7s forwards;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      font-family: 'Inter', sans-serif;
+    }
+
+    @keyframes toastIn {
+      from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+      }
+    }
+
+    @keyframes toastOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+        transform: translateX(-50%) translateY(-20px);
+      }
+    }
+
+    .word-triggers {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 0.8rem;
+      overflow: hidden;
+    }
+
+    .word-triggers table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.75rem;
+    }
+
+    .word-triggers th {
+      text-align: left;
+      padding: 0.5rem 0.8rem;
+      background: var(--surface2);
+      color: var(--text2);
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .word-triggers td {
+      padding: 0.5rem 0.8rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text2);
+    }
+
+    .word-triggers tr:last-child td {
+      border-bottom: none;
+    }
+
+    .word-triggers .trigger-word {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .word-triggers .trigger-response {
+      color: var(--text);
+    }
+
+    .word-triggers .trigger-found {
+      background: var(--accent-dim);
+    }
+
+    .word-triggers .trigger-found .trigger-word {
+      color: var(--accent);
+    }
+
+    .word-clear-btn {
+      margin-top: 0.5rem;
+    }
+
+    /* Visual Easter Eggs */
+    .secret-pixel {
+      position: fixed;
+      bottom: 5px;
+      right: 5px;
+      width: 3px;
+      height: 3px;
+      background: var(--bg);
+      cursor: pointer;
+      border-radius: 50%;
+      transition: all 0.3s;
+      z-index: 999;
+    }
+
+    .secret-pixel:hover {
+      width: 200px;
+      height: auto;
+      padding: 10px;
+      background: var(--surface);
+      border: 1px solid var(--accent);
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 0.7rem;
+    }
+
+    .secret-pixel:hover::after {
+      content: 'SI SE METEN CON CRISTINA';
+    }
+
+    .header-subtitle {
+      font-size: 0.65rem;
+      color: var(--text3);
+      margin-top: -1.5rem;
+      margin-bottom: 1.5rem;
+      cursor: default;
+    }
+
+    .header-subtitle:hover span.hidden-msg {
+      opacity: 1;
+    }
+
+    .header-subtitle span.hidden-msg {
+      opacity: 0;
+      transition: opacity 0.5s;
+      margin-left: 6px;
+      color: var(--accent);
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Top Ad Banner -->
+  <div class="page-wrapper">
+    <aside class="ad-sidebar">
+      <!-- GOOGLE ADSENSE: Sidebar izquierdo 160x600 -->
+      <!-- Reemplazá este div con tu código de AdSense -->
+      <div class="ad-sidebar-slot" id="ad-sidebar-left">
+        <!-- <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        Ad 160×600
+      </div>
+    </aside>
+    <div class="page">
+
+      <!-- GOOGLE ADSENSE: Banner superior 728x90 -->
+      <div class="ad-banner" id="ad-top-banner">
+        <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        Ad 728×90
+      </div>
+
+      <!-- Typing Display (arriba de todo) -->
+      <div class="typing-display" id="typing-display" style="margin-bottom:1rem;">
+        <span class="typing-placeholder" id="typing-placeholder">Empezá a escribir...</span>
+        <span class="typing-text" id="typing-text"></span><span class="typing-cursor"></span>
+      </div>
+
+      <header>
+        <div class="logo">
+          <span class="logo-name">KeyTest</span>
+          <span class="logo-tag">v2.0</span>
+        </div>
+        <div class="header-actions">
+          <div class="toggle-item">
+            <input type="checkbox" id="soundToggle">
+            <label for="soundToggle">🔊 Sonido</label>
+          </div>
+          <button class="btn" onclick="resetAll()">↺ Reiniciar</button>
+          <button class="btn btn-accent" onclick="exportReport()">⬇ Exportar</button>
+        </div>
+      </header>
+      <div class="header-subtitle">La herramienta que tu teclado no sabía que necesitaba<span class="hidden-msg">👀 hacé
+          hover acá de nuevo...</span></div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-label">Teclas presionadas</div>
+          <div class="stat-value" id="stat-total">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Teclas únicas</div>
+          <div class="stat-value green" id="stat-unique">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Teclas pendientes</div>
+          <div class="stat-value yellow" id="stat-pending">104</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pulsaciones/min</div>
+          <div class="stat-value" id="stat-wpm">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Última tecla</div>
+          <div class="stat-value" id="stat-last" style="font-size:1rem;">—</div>
+        </div>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="info-panel">
+        <div class="info-main">
+          <span class="status-dot" id="status-dot"></span>
+          <span class="info-keyname idle" id="info-keyname">Presiona cualquier tecla para comenzar…</span>
+        </div>
+        <div class="info-details">
+          <div class="info-item">
+            <span class="info-item-label">Key</span>
+            <span class="info-item-value" id="ii-key">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-item-label">Code</span>
+            <span class="info-item-value" id="ii-code">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-item-label">KeyCode</span>
+            <span class="info-item-value" id="ii-keycode">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-item-label">Which</span>
+            <span class="info-item-value" id="ii-which">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-item-label">Location</span>
+            <span class="info-item-value" id="ii-loc">—</span>
+          </div>
+          <div class="info-item">
+            <span class="info-item-label">Repeat</span>
+            <span class="info-item-value" id="ii-repeat">—</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Progress -->
+      <div class="progress-wrap">
+        <div class="section-label">Progreso del test</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+        </div>
+        <div class="progress-label" id="progress-label">0 / 104 teclas testeadas</div>
+      </div>
+
+      <!-- Inline Ad -->
+      <!-- GOOGLE ADSENSE: Banner inline 728x90 -->
+      <div class="ad-inline" id="ad-inline">
+        <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        Ad 728×90
+      </div>
+
+      <!-- Keyboard -->
+      <div class="keyboard-wrap">
+        <div class="section-label" style="margin-bottom:0.75rem;">Teclado interactivo</div>
+        <div class="keyboard-scaler" id="keyboard-scaler">
+          <div class="keyboard" id="keyboard">
+            <!-- Row 0: Fn keys -->
+            <div class="kb-row">
+              <div class="key fn-sm" data-code="Escape"><span class="main-label">ESC</span></div>
+              <div class="kb-gap"></div>
+              <div class="key fn-sm fn-wide" data-code="F1"><span class="main-label">F1</span></div>
+              <div class="key fn-sm fn-wide" data-code="F2"><span class="main-label">F2</span></div>
+              <div class="key fn-sm fn-wide" data-code="F3"><span class="main-label">F3</span></div>
+              <div class="key fn-sm fn-wide" data-code="F4"><span class="main-label">F4</span></div>
+              <div class="kb-gap"></div>
+              <div class="key fn-sm fn-wide" data-code="F5"><span class="main-label">F5</span></div>
+              <div class="key fn-sm fn-wide" data-code="F6"><span class="main-label">F6</span></div>
+              <div class="key fn-sm fn-wide" data-code="F7"><span class="main-label">F7</span></div>
+              <div class="key fn-sm fn-wide" data-code="F8"><span class="main-label">F8</span></div>
+              <div class="kb-gap"></div>
+              <div class="key fn-sm fn-wide" data-code="F9"><span class="main-label">F9</span></div>
+              <div class="key fn-sm fn-wide" data-code="F10"><span class="main-label">F10</span></div>
+              <div class="key fn-sm fn-wide" data-code="F11"><span class="main-label">F11</span></div>
+              <div class="key fn-sm fn-wide" data-code="F12"><span class="main-label">F12</span></div>
+              <div class="kb-gap"></div>
+              <div class="key fn-sm" data-code="PrintScreen"><span class="main-label" style="font-size:8px">PrtSc</span>
+              </div>
+              <div class="key fn-sm" data-code="ScrollLock"><span class="main-label" style="font-size:8px">ScLk</span>
+              </div>
+              <div class="key fn-sm" data-code="Pause"><span class="main-label" style="font-size:8px">Pause</span></div>
+            </div>
+
+            <!-- Row 1: Numbers -->
+            <div class="kb-row" style="margin-top:8px">
+              <div class="key" data-code="Backquote"><span class="top-label">~</span><span class="main-label">`</span>
+              </div>
+              <div class="key" data-code="Digit1"><span class="top-label">!</span><span class="main-label">1</span>
+              </div>
+              <div class="key" data-code="Digit2"><span class="top-label">@</span><span class="main-label">2</span>
+              </div>
+              <div class="key" data-code="Digit3"><span class="top-label">#</span><span class="main-label">3</span>
+              </div>
+              <div class="key" data-code="Digit4"><span class="top-label">$</span><span class="main-label">4</span>
+              </div>
+              <div class="key" data-code="Digit5"><span class="top-label">%</span><span class="main-label">5</span>
+              </div>
+              <div class="key" data-code="Digit6"><span class="top-label">^</span><span class="main-label">6</span>
+              </div>
+              <div class="key" data-code="Digit7"><span class="top-label">&</span><span class="main-label">7</span>
+              </div>
+              <div class="key" data-code="Digit8"><span class="top-label">*</span><span class="main-label">8</span>
+              </div>
+              <div class="key" data-code="Digit9"><span class="top-label">(</span><span class="main-label">9</span>
+              </div>
+              <div class="key" data-code="Digit0"><span class="top-label">)</span><span class="main-label">0</span>
+              </div>
+              <div class="key" data-code="Minus"><span class="top-label">_</span><span class="main-label">-</span></div>
+              <div class="key" data-code="Equal"><span class="top-label">+</span><span class="main-label">=</span></div>
+              <div class="key backspace" data-code="Backspace"><span class="main-label">⌫ Backspace</span></div>
+              <div class="kb-gap"></div>
+              <div class="key" data-code="Insert"><span class="main-label" style="font-size:9px">Ins</span></div>
+              <div class="key" data-code="Home"><span class="main-label" style="font-size:9px">Home</span></div>
+              <div class="key" data-code="PageUp"><span class="main-label" style="font-size:9px">PgUp</span></div>
+              <div class="kb-gap"></div>
+              <div class="key" data-code="NumLock"><span class="main-label" style="font-size:9px">Num</span></div>
+              <div class="key" data-code="NumpadDivide"><span class="main-label">/</span></div>
+              <div class="key" data-code="NumpadMultiply"><span class="main-label">*</span></div>
+              <div class="key" data-code="NumpadSubtract"><span class="main-label">-</span></div>
+            </div>
+
+            <!-- Row 2: QWERTY -->
+            <div class="kb-row">
+              <div class="key tab" data-code="Tab"><span class="main-label">Tab ⇥</span></div>
+              <div class="key" data-code="KeyQ"><span class="main-label">Q</span></div>
+              <div class="key" data-code="KeyW"><span class="main-label">W</span></div>
+              <div class="key" data-code="KeyE"><span class="main-label">E</span></div>
+              <div class="key" data-code="KeyR"><span class="main-label">R</span></div>
+              <div class="key" data-code="KeyT"><span class="main-label">T</span></div>
+              <div class="key" data-code="KeyY"><span class="main-label">Y</span></div>
+              <div class="key" data-code="KeyU"><span class="main-label">U</span></div>
+              <div class="key" data-code="KeyI"><span class="main-label">I</span></div>
+              <div class="key" data-code="KeyO"><span class="main-label">O</span></div>
+              <div class="key" data-code="KeyP"><span class="main-label">P</span></div>
+              <div class="key" data-code="BracketLeft"><span class="top-label">{</span><span class="main-label">[</span>
+              </div>
+              <div class="key" data-code="BracketRight"><span class="top-label">}</span><span
+                  class="main-label">]</span></div>
+              <div class="key wide" data-code="Backslash"><span class="top-label">|</span><span
+                  class="main-label">\</span></div>
+              <div class="kb-gap"></div>
+              <div class="key" data-code="Delete"><span class="main-label" style="font-size:9px">Del</span></div>
+              <div class="key" data-code="End"><span class="main-label" style="font-size:9px">End</span></div>
+              <div class="key" data-code="PageDown"><span class="main-label" style="font-size:9px">PgDn</span></div>
+              <div class="kb-gap"></div>
+              <div class="key" data-code="Numpad7"><span class="top-label">Home</span><span class="main-label">7</span>
+              </div>
+              <div class="key" data-code="Numpad8"><span class="top-label">↑</span><span class="main-label">8</span>
+              </div>
+              <div class="key" data-code="Numpad9"><span class="top-label">PgUp</span><span class="main-label">9</span>
+              </div>
+              <div class="key" data-code="NumpadAdd"><span class="main-label">+</span></div>
+            </div>
+
+            <!-- Row 3: ASDF -->
+            <div class="kb-row">
+              <div class="key caps caps-led" data-code="CapsLock"><span class="main-label">Caps</span></div>
+              <div class="key" data-code="KeyA"><span class="main-label">A</span></div>
+              <div class="key" data-code="KeyS"><span class="main-label">S</span></div>
+              <div class="key" data-code="KeyD"><span class="main-label">D</span></div>
+              <div class="key" data-code="KeyF"><span class="main-label">F</span></div>
+              <div class="key" data-code="KeyG"><span class="main-label">G</span></div>
+              <div class="key" data-code="KeyH"><span class="main-label">H</span></div>
+              <div class="key" data-code="KeyJ"><span class="main-label">J</span></div>
+              <div class="key" data-code="KeyK"><span class="main-label">K</span></div>
+              <div class="key" data-code="KeyL"><span class="main-label">L</span></div>
+              <div class="key" data-code="Semicolon"><span class="top-label">:</span><span class="main-label">;</span>
+              </div>
+              <div class="key" data-code="Quote"><span class="top-label">"</span><span class="main-label">'</span></div>
+              <div class="key enter" data-code="Enter"><span class="main-label">Enter ↩</span></div>
+              <div class="kb-gap"></div>
+              <div style="min-width:128px"></div><!-- spacer for nav cluster (3×40 + 2×4) -->
+              <div class="kb-gap"></div>
+              <div class="key" data-code="Numpad4"><span class="top-label">←</span><span class="main-label">4</span>
+              </div>
+              <div class="key" data-code="Numpad5"><span class="main-label">5</span></div>
+              <div class="key" data-code="Numpad6"><span class="top-label">→</span><span class="main-label">6</span>
+              </div>
+              <div style="min-width:40px"></div><!-- spacer for 4th numpad col -->
+            </div>
+
+            <!-- Row 4: ZXCV -->
+            <div class="kb-row">
+              <div class="key lshift" data-code="ShiftLeft"><span class="main-label">⇧ Shift</span></div>
+              <div class="key" data-code="KeyZ"><span class="main-label">Z</span></div>
+              <div class="key" data-code="KeyX"><span class="main-label">X</span></div>
+              <div class="key" data-code="KeyC"><span class="main-label">C</span></div>
+              <div class="key" data-code="KeyV"><span class="main-label">V</span></div>
+              <div class="key" data-code="KeyB"><span class="main-label">B</span></div>
+              <div class="key" data-code="KeyN"><span class="main-label">N</span></div>
+              <div class="key" data-code="KeyM"><span class="main-label">M</span></div>
+              <div class="key" data-code="Comma"><span class="top-label">&lt;</span><span class="main-label">,</span>
+              </div>
+              <div class="key" data-code="Period"><span class="top-label">&gt;</span><span class="main-label">.</span>
+              </div>
+              <div class="key" data-code="Slash"><span class="top-label">?</span><span class="main-label">/</span></div>
+              <div class="key rshift" data-code="ShiftRight"><span class="main-label">Shift ⇧</span></div>
+              <div class="kb-gap"></div>
+              <div style="min-width:40px"></div>
+              <div class="key" data-code="ArrowUp"><span class="main-label">↑</span></div>
+              <div style="min-width:40px"></div>
+              <div class="kb-gap"></div>
+              <div class="key" data-code="Numpad1"><span class="top-label">End</span><span class="main-label">1</span>
+              </div>
+              <div class="key" data-code="Numpad2"><span class="top-label">↓</span><span class="main-label">2</span>
+              </div>
+              <div class="key" data-code="Numpad3"><span class="top-label">PgDn</span><span class="main-label">3</span>
+              </div>
+              <div class="key" data-code="NumpadEnter"><span class="main-label">↩</span></div>
+            </div>
+
+            <!-- Row 5: Bottom -->
+            <div class="kb-row">
+              <div class="key lctrl" data-code="ControlLeft"><span class="main-label">Ctrl</span></div>
+              <div class="key meta" data-code="MetaLeft"><span class="main-label">⊞</span></div>
+              <div class="key lalt" data-code="AltLeft"><span class="main-label">Alt</span></div>
+              <div class="key space" data-code="Space"><span class="main-label">Space</span></div>
+              <div class="key ralt" data-code="AltRight"><span class="main-label">Alt</span></div>
+              <div class="key meta" data-code="MetaRight"><span class="main-label">⊞</span></div>
+              <div class="key meta" data-code="ContextMenu"><span class="main-label" style="font-size:9px">Menu</span>
+              </div>
+              <div class="key rctrl" data-code="ControlRight"><span class="main-label">Ctrl</span></div>
+              <div class="kb-gap"></div>
+              <div class="key" data-code="ArrowLeft"><span class="main-label">←</span></div>
+              <div class="key" data-code="ArrowDown"><span class="main-label">↓</span></div>
+              <div class="key" data-code="ArrowRight"><span class="main-label">→</span></div>
+              <div class="kb-gap"></div>
+              <div class="key wider" data-code="Numpad0"><span class="top-label">Ins</span><span
+                  class="main-label">0</span></div>
+              <div class="key" data-code="NumpadDecimal"><span class="top-label">Del</span><span
+                  class="main-label">.</span></div>
+              <div style="min-width:40px"></div><!-- spacer for 4th numpad col -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Held keys -->
+      <div style="margin-bottom:1.75rem">
+        <div class="section-label">Teclas mantenidas ahora mismo</div>
+        <div class="held-row" id="held-row">
+          <span style="font-size:0.75rem; color:var(--text3)">Ninguna</span>
+        </div>
+      </div>
+
+      <!-- Log -->
+      <div class="log-section">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.6rem;">
+          <div class="section-label" style="margin:0">Historial de pulsaciones</div>
+          <button class="btn" style="font-size:0.65rem; padding:3px 8px;" onclick="clearLog()">Limpiar</button>
+        </div>
+        <div class="log-grid" id="log-grid">
+          <span style="font-size:0.75rem; color:var(--text3)">Esperando pulsaciones…</span>
+        </div>
+      </div>
+
+
+      <!-- GOOGLE ADSENSE: Banner inferior 728x90 -->
+      <div class="ad-banner ad-banner-bottom" id="ad-bottom-banner">
+        <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        Ad 728×90
+      </div>
+
+      <footer>
+        <span>KeyTest — Tester de teclado profesional · Ningún dato es enviado a servidores</span>
+        <br><span id="footer-egg" style="cursor:pointer;opacity:0.3;font-size:0.55rem"
+          title="Hover para nada... o sí 🤔">🥚 ¿Encontraste todos los easter eggs? (hay más de 15)</span>
+      </footer>
+      <!-- Si estás leyendo el código fuente: felicidades, sos el tipo de persona que lee los términos y condiciones -->
+      <!-- P.D: El programador que hizo esto no durmió... pero el teclado sí, cada vez que apretás Sleep -->
+      <!-- P.P.D: Si encontraste esto, mandá un mail a teclado@noexiste.com con el asunto "Soy un hackerman" -->
+      <!-- P.P.P.D: Ese mail no existe. Como mi vida social. -->
+      <div class="secret-pixel" title="..."></div>
+    </div>
+    <aside class="ad-sidebar">
+      <!-- GOOGLE ADSENSE: Sidebar derecho 160x600 -->
+      <div class="ad-sidebar-slot" id="ad-sidebar-right">
+        <!-- <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
+        Ad 160×600
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    /*
+     * ██╗  ██╗███████╗██╗   ██╗████████╗███████╗███████╗████████╗
+     * ██║ ██╔╝██╔════╝╚██╗ ██╔╝╚══██╔══╝██╔════╝██╔════╝╚══██╔══╝
+     * █████╔╝ █████╗   ╚████╔╝    ██║   █████╗  ███████╗   ██║
+     * ██╔═██╗ ██╔══╝    ╚██╔╝     ██║   ██╔══╝  ╚════██║   ██║
+     * ██║  ██╗███████╗   ██║      ██║   ███████╗███████║   ██║
+     * ╚═╝  ╚═╝╚══════╝   ╚═╝      ╚═╝   ╚══════╝╚══════╝   ╚═╝
+     * 
+     * Si estás leyendo esto, te mereces un aumento. O al menos un café.
+     * 
+     * Fun fact: Este código tiene más comentarios graciosos que bugs.
+     * Bueno, eso esperamos.
+     */
+
+    // ¿Sabías que el 90% de los programadores no leen los comentarios?
+    // Si llegaste hasta acá, sos del 10% que tiene demasiado tiempo libre.
+    const testedKeys = new Set();
+    const heldKeys = new Set();
+    const keyPressLog = [];
+    let totalPresses = 0; // También conocido como "cuántas veces le pegaste al teclado"
+    let capsOn = false; // SI ESTO ES TRUE, ESTÁS GRITANDO
+    let pressTimestamps = [];
+    let logInitialized = false;
+    const TOTAL_KEYS = 104; // Como Dálmatas, pero teclas
+    const soundEnabled = () => document.getElementById('soundToggle').checked;
+
+    // Easter egg: mensajes random para la consola
+    const consoleMsgs = [
+      '🎹 ¿Sabías que QWERTY fue diseñado para que las máquinas de escribir no se trabaran?',
+      '🤓 El Space es la tecla más presionada del mundo. Básicamente es la Messi de las teclas.',
+      '💀 Un momento de silencio por todas las teclas que nunca fueron presionadas...',
+      '🎮 ↑↑↓↓←→←→BA ... no, esto no es un Konami Code.',
+      '🧠 Fun fact: "Teclado" en alemán es "Tastatur". De nada.',
+      '☕ Este código fue escrito con 47 tazas de café y 0 horas de sueño.',
+      '🐛 No es un bug, es una feature no documentada.',
+      '🤖 Hola humano. Soy tu teclado. Dejá de pegarme.',
+    ];
+    console.log('%c' + consoleMsgs[Math.floor(Math.random() * consoleMsgs.length)], 'font-size:14px;color:#4ec990;');
+
+    const allCodes = new Set([
+      'Escape', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7', 'F8', 'F9', 'F10', 'F11', 'F12',
+      'PrintScreen', 'ScrollLock', 'Pause',
+      'Backquote', 'Digit1', 'Digit2', 'Digit3', 'Digit4', 'Digit5', 'Digit6', 'Digit7',
+      'Digit8', 'Digit9', 'Digit0', 'Minus', 'Equal', 'Backspace',
+      'Insert', 'Home', 'PageUp', 'NumLock', 'NumpadDivide', 'NumpadMultiply', 'NumpadSubtract',
+      'Tab', 'KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP',
+      'BracketLeft', 'BracketRight', 'Backslash',
+      'Delete', 'End', 'PageDown', 'Numpad7', 'Numpad8', 'Numpad9', 'NumpadAdd',
+      'CapsLock', 'KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL',
+      'Semicolon', 'Quote', 'Enter', 'Numpad4', 'Numpad5', 'Numpad6',
+      'ShiftLeft', 'KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM',
+      'Comma', 'Period', 'Slash', 'ShiftRight',
+      'ArrowUp', 'Numpad1', 'Numpad2', 'Numpad3', 'NumpadEnter',
+      'ControlLeft', 'MetaLeft', 'AltLeft', 'Space', 'AltRight', 'MetaRight', 'ContextMenu', 'ControlRight',
+      'ArrowLeft', 'ArrowDown', 'ArrowRight', 'Numpad0', 'NumpadDecimal'
+    ]);
+
+    // AudioContext for click sounds
+    // (Porque un teclado sin sonido es como una pizza sin queso)
+    let audioCtx;
+    function playClick(type = 'down') {
+      if (!soundEnabled()) return;
+      try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(type === 'down' ? 800 : 600, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(type === 'down' ? 400 : 300, audioCtx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 0.06);
+      } catch (e) { /* El sonido falló. Como mis relaciones. */ }
+    }
+
+    function getKeyEl(code) {
+      return document.querySelector(`[data-code="${code}"]`);
+    }
+
+    function updateStats() {
+      const unique = testedKeys.size;
+      const pending = Math.max(0, TOTAL_KEYS - unique);
+      document.getElementById('stat-total').textContent = totalPresses;
+      document.getElementById('stat-unique').textContent = unique;
+      document.getElementById('stat-pending').textContent = pending;
+
+      // WPM-like metric (presses per minute)
+      const now = Date.now();
+      pressTimestamps = pressTimestamps.filter(t => now - t < 60000);
+      document.getElementById('stat-wpm').textContent = pressTimestamps.length;
+
+      // Progress
+      const pct = Math.round((unique / TOTAL_KEYS) * 100);
+      document.getElementById('progress-fill').style.width = pct + '%';
+      document.getElementById('progress-label').textContent =
+        `${unique} / ${TOTAL_KEYS} teclas testeadas (${pct}%)`;
+    }
+
+    function updateHeld() {
+      const row = document.getElementById('held-row');
+      if (heldKeys.size === 0) {
+        row.innerHTML = '<span style="font-size:0.75rem;color:var(--text3)">Ninguna</span>';
+        return;
+      }
+      row.innerHTML = [...heldKeys].map(k =>
+        `<div class="held-chip">${k}</div>`
+      ).join('');
+    }
+
+    function addToLog(key, code) {
+      if (!logInitialized) {
+        document.getElementById('log-grid').innerHTML = '';
+        logInitialized = true;
+      }
+      const grid = document.getElementById('log-grid');
+      const chip = document.createElement('div');
+      chip.className = 'log-chip';
+      chip.innerHTML = `<span class="lc-key">${escapeHtml(key || code)}</span><span class="lc-code">${code}</span>`;
+      grid.prepend(chip);
+      // keep max 80
+      while (grid.children.length > 80) grid.removeChild(grid.lastChild);
+    }
+
+    // 🔍 Word Detector System
+    // (Porque hasta los teclados merecen que alguien los escuche)
+    let typingBuffer = '';
+    const wordTriggers = {
+      'hola': '¡Hola! ¿Cómo estás? ¿Viniste a romper teclas o a hacer amigos? 😄',
+      'test': 'Modo test activado. Si se te rompe algo, no fue culpa nuestra 😇',
+      'ayuda': 'AYUDA: Step 1: Presioná teclas. Step 2: No hay step 2. De nada. 🧐',
+      'cafe': '☕ Teclado dice: "Sin café no testeo". Prioridades.',
+      'bug': '🐛 No es un bug, es una feature sorpresa. Documentación: "pendiente desde 2019"',
+      'secreto': '🤫 SSHHH! Encontraste el secreto. Lamentablemente no hay premio. Solo este mensaje.',
+      'amor': '❤️ El teclado te ama más que tu ex. Al menos él siempre responde cuando le tocás 😏',
+      'pizza': '🍕 Fun fact: El 73% de los bugs se resuelven después de pedir pizza. Fuente: Creéme.',
+      'windows': '🪟 *sonido de Windows XP* Ta-da-da-da-daaaa ♪ (nostalgia intensifies)',
+      'linux': '🐧 I use Arch btw. — Probablemente vos, si escribiste esto.',
+      'mac': '🍎 "Funciona en mi Mac" — El 90% de los bugs reportados.',
+      'lol': '😂 jajajaja... perdón, es que "lol" me da risa. Me río de lo simple que soy.',
+      'rage': '😡 CALMATE. El teclado tiene sentimientos. Bueno, no, pero igual no lo golpees.',
+      'gg': '🎮 GG WP. ¿Estamos jugando? Pensé que estabas testeando teclas.',
+      'f': '😔 F en el chat. Press F to pay respects. Ya lo hiciste.',
+      'xd': '😜 XD es la risa universal. Funciona en 194 países y 7 mares.',
+      'java': '☕ try { chiste(); } catch (Exception e) { System.out.println("No fue gracioso"); }',
+      'python': '🐍 import humor; humor.tell_joke() # IndentationError: la risa está mal indentada',
+      'gato': '🐱 MIAU. El gato caminó por tu teclado: asdfghjklñ',
+      'perro': '🐶 GUAU GUAU. Los perros no saben escribir pero presionan más teclas que vos.',
+    };
+    const foundWords = new Set();
+
+    function updateTypingDisplay(key, code) {
+      // Only process printable characters and special keys
+      if (key === 'Backspace' || code === 'Backspace') {
+        typingBuffer = typingBuffer.slice(0, -1);
+      } else if (key === ' ' || code === 'Space') {
+        typingBuffer += ' ';
+      } else if (key && key.length === 1) {
+        typingBuffer += key;
+      } else {
+        return; // Ignore non-printable keys
+      }
+
+      // Keep buffer reasonable (last 200 chars)
+      if (typingBuffer.length > 200) typingBuffer = typingBuffer.slice(-200);
+
+      // Update display
+      const textEl = document.getElementById('typing-text');
+      const placeholder = document.getElementById('typing-placeholder');
+      if (textEl) textEl.textContent = typingBuffer;
+      if (placeholder) placeholder.style.display = typingBuffer.length > 0 ? 'none' : 'inline';
+
+      // Check for trigger words
+      const bufferLower = typingBuffer.toLowerCase();
+      for (const [word, response] of Object.entries(wordTriggers)) {
+        if (bufferLower.endsWith(word) && !foundWords.has(word)) {
+          foundWords.add(word);
+          showWordToast(response);
+          markTriggerFound(word);
+        }
+      }
+    }
+
+    function showWordToast(message) {
+      // Remove existing toasts
+      document.querySelectorAll('.word-toast').forEach(t => t.remove());
+      const toast = document.createElement('div');
+      toast.className = 'word-toast';
+      toast.textContent = message;
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 3000);
+    }
+
+    function markTriggerFound(word) {
+      // Secret mode: no table to update, just console log
+      console.log(`%c🎯 Palabra secreta desbloqueada: "${word}"`, 'font-size:12px;color:#4ec990;font-weight:bold;');
+    }
+
+    function clearTyping() {
+      typingBuffer = '';
+      const textEl = document.getElementById('typing-text');
+      const placeholder = document.getElementById('typing-placeholder');
+      if (textEl) textEl.textContent = '';
+      if (placeholder) placeholder.style.display = 'inline';
+      // Note: foundWords are NOT reset - once found, they stay found
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function locationName(loc) {
+      return ['Standard', 'Left', 'Right', 'Numpad'][loc] || 'Unknown';
+    }
+
+    document.addEventListener('keydown', function (e) {
+      // Only prevent the browser default action (F5 refresh, F11 fullscreen, etc.)
+      // but DO NOT stopPropagation — let the event reach our handler
+      e.preventDefault();
+
+      const code = e.code;
+      const key = e.key;
+
+      // Caps state
+      if (code === 'CapsLock') {
+        capsOn = !capsOn;
+        const capsEl = getKeyEl('CapsLock');
+        if (capsEl) capsEl.classList.toggle('caps-on', capsOn);
+      }
+
+      // Info panel
+      const dot = document.getElementById('status-dot');
+      dot.classList.add('active');
+      document.getElementById('info-keyname').textContent = key;
+      document.getElementById('info-keyname').className = 'info-keyname';
+      document.getElementById('ii-key').textContent = key;
+      document.getElementById('ii-code').textContent = code;
+      document.getElementById('ii-keycode').textContent = e.keyCode;
+      document.getElementById('ii-which').textContent = e.which;
+      document.getElementById('ii-loc').textContent = locationName(e.location);
+      document.getElementById('ii-repeat').textContent = e.repeat ? 'Sí' : 'No';
+      document.getElementById('stat-last').textContent = key.length === 1 ? key : code.replace('Key', '').replace('Digit', '').replace('Numpad', 'Num');
+
+      if (!e.repeat) {
+        // Visual key press
+        const el = getKeyEl(code);
+        if (el) {
+          el.classList.add('pressed');
+          if (!testedKeys.has(code) && allCodes.has(code)) {
+            testedKeys.add(code);
+            el.classList.add('tested');
+          }
+        }
+
+        totalPresses++;
+        pressTimestamps.push(Date.now());
+        heldKeys.add(key === ' ' ? 'Space' : (key.length === 1 ? key : code.replace('Key', '').replace('Digit', '')));
+        playClick('down');
+        addToLog(key, code);
+        updateTypingDisplay(key, code); // Feed to word detector
+        updateStats();
+        updateHeld();
+
+        // 🥚 Easter egg: mensajes en hitos
+        const milestoneMsg = {
+          10: '¡10 teclas! Recién arrancás, dale con todo 💪',
+          25: '25 teclas... ¿ya probaste el Scroll Lock? Nadie lo hace 😏',
+          50: '¡Mitad del camino! Sos más dedicado que el 80% de los usuarios 🏆',
+          69: 'Nice. 😎',
+          75: '75 teclas. Tu teclado está orgulloso de vos 🥹',
+          100: '¡¡100 TECLAS!! Casi casi... ¿te faltan las que nadie usa? 🎯',
+          104: '🎉🎉🎉 ¡¡¡TODAS LAS TECLAS!!! 🎉🎉🎉 Sos oficialmente un teclado-maníaco. Tu teclado quiere un descanso.',
+        };
+        if (milestoneMsg[testedKeys.size]) {
+          const msg = milestoneMsg[testedKeys.size];
+          console.log('%c' + msg, 'font-size:16px;color:#4ec990;font-weight:bold;');
+          // Show in info panel briefly
+          const nameEl = document.getElementById('info-keyname');
+          nameEl.textContent = msg;
+          if (testedKeys.size === 104) document.title = '🎉 ¡COMPLETADO! — KeyTest';
+        }
+      }
+    });
+
+    document.addEventListener('keyup', function (e) {
+      const code = e.code;
+      const key = e.key;
+
+      const el = getKeyEl(code);
+      if (el) el.classList.remove('pressed');
+
+      heldKeys.delete(key === ' ' ? 'Space' : (key.length === 1 ? key : code.replace('Key', '').replace('Digit', '')));
+      heldKeys.delete(key); // cleanup
+
+      document.getElementById('status-dot').classList.remove('active');
+      playClick('up');
+      updateHeld();
+    });
+
+    // Block browser defaults in capture phase (F5 refresh, F11 fullscreen, Tab focus, etc.)
+    // Only preventDefault — NOT stopPropagation, so our handlers still fire
+    document.addEventListener('keydown', e => {
+      e.preventDefault();
+    }, { capture: true });
+
+    document.addEventListener('keyup', e => {
+      e.preventDefault();
+    }, { capture: true });
+
+    // Block context menu from ContextMenu key
+    document.addEventListener('contextmenu', e => e.preventDefault());
+
+    // Attempt to capture PrintScreen (keyup only in some browsers)
+    document.addEventListener('keyup', function (e) {
+      if (e.code === 'PrintScreen') {
+        const el = document.querySelector('[data-code="PrintScreen"]');
+        if (el && !el.classList.contains('tested')) {
+          el.classList.add('tested');
+          testedKeys.add('PrintScreen');
+          totalPresses++;
+          pressTimestamps.push(Date.now());
+          addToLog('PrintScreen', 'PrintScreen');
+          updateStats();
+        }
+      }
+    });
+
+    function resetAll() {
+      testedKeys.clear();
+      heldKeys.clear();
+      totalPresses = 0;
+      capsOn = false;
+      pressTimestamps = [];
+      logInitialized = false;
+
+      document.querySelectorAll('.key').forEach(el => {
+        el.classList.remove('pressed', 'tested', 'caps-on');
+      });
+      document.getElementById('log-grid').innerHTML = '<span style="font-size:0.75rem;color:var(--text3)">Esperando pulsaciones…</span>';
+      document.getElementById('info-keyname').textContent = 'Presiona cualquier tecla para comenzar…';
+      document.getElementById('info-keyname').className = 'info-keyname idle';
+      ['ii-key', 'ii-code', 'ii-keycode', 'ii-which', 'ii-loc', 'ii-repeat', 'stat-last'].forEach(id => {
+        document.getElementById(id).textContent = id === 'stat-last' ? '—' : '—';
+      });
+      document.getElementById('status-dot').classList.remove('active');
+      updateStats();
+      updateHeld();
+      // Reset word detector too
+      clearTyping();
+      foundWords.clear();
+    }
+
+    function clearLog() {
+      document.getElementById('log-grid').innerHTML = '<span style="font-size:0.75rem;color:var(--text3)">Esperando pulsaciones…</span>';
+      logInitialized = false;
+    }
+
+    function exportReport() {
+      const lines = [
+        '=== KeyTest — Reporte de Teclado ===',
+        `Fecha: ${new Date().toLocaleString()}`,
+        `Total de pulsaciones: ${totalPresses}`,
+        `Teclas únicas testeadas: ${testedKeys.size} / ${TOTAL_KEYS}`,
+        '',
+        '--- Teclas testeadas ---',
+        ...[...testedKeys].sort(),
+        '',
+        '--- Teclas NO testeadas ---',
+        ...[...allCodes].filter(c => !testedKeys.has(c)).sort()
+      ];
+      const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'keytest-report.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // Init — como decía mi abuela: "Al que madruga, Dios le ayuda con el debugging"
+    updateStats();
+
+    // 🥚 Easter egg: Konami Code (↑↑↓↓←→←→BA) activa modo arcoíris
+    let konamiBuffer = [];
+    const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
+    document.addEventListener('keydown', function konamiCheck(e) {
+      konamiBuffer.push(e.code);
+      if (konamiBuffer.length > 10) konamiBuffer.shift();
+      if (konamiBuffer.join(',') === konamiCode.join(',')) {
+        document.body.style.animation = 'rainbow 2s linear infinite';
+        const style = document.createElement('style');
+        style.textContent = '@keyframes rainbow { 0%{filter:hue-rotate(0deg)} 100%{filter:hue-rotate(360deg)} }';
+        document.head.appendChild(style);
+        console.log('%c🌈 KONAMI CODE ACTIVADO! 🌈 Desbloqueaste el modo discoteca!', 'font-size:20px;color:red;font-weight:bold;');
+        alert('🌈 ¡Modo Arcoíris activado! ¡Sos un gamer de verdad!');
+        konamiBuffer = [];
+      }
+    });
+
+    // 🥚 Easter egg: Si hacés click 5 veces en el logo, cambia el nombre
+    let logoClicks = 0;
+    const logoNames = ['KeyTest', 'TeclaTest', 'ApretáTodo', 'RompeKeys', 'TestManía', 'TecladoLoco', 'PressF', 'QWERTY Hero'];
+    document.querySelector('.logo-name')?.addEventListener('click', () => {
+      logoClicks++;
+      if (logoClicks >= 5) {
+        const newName = logoNames[Math.floor(Math.random() * logoNames.length)];
+        document.querySelector('.logo-name').textContent = newName;
+        document.title = newName + ' — Tester de Teclado';
+        console.log(`%c🎭 Nombre secreto desbloqueado: ${newName}!`, 'font-size:14px;color:#e0b840;');
+        logoClicks = 0;
+      }
+    });
+
+    // 🥚 Easter egg: el footer egg muestra chistes al hacer click
+    const chistes = [
+      '¿Qué le dice un teclado a otro? "Sos mi tipo" ⌨️',
+      '¿Por qué el teclado fue al psicólogo? Porque tenía demasiadas teclas emocionales 😢',
+      '¿Cuál es la tecla más religiosa? Ctrl, porque siempre quiere tener el control 🙏',
+      '¿Por qué el Caps Lock no tiene amigos? Porque SIEMPRE GRITA 😤',
+      '¿Qué hace un teclado en el gimnasio? Ejercicios de PRESIÓN 💪',
+      'Alt+F4 es como decirle "nos vemos" a la ventana... literalmente 👋',
+      'Delete y Backspace se odian. Uno borra para adelante y otro para atrás. Nunca se ponen de acuerdo 🤷',
+      'Enter es el único que siempre tiene la última palabra ↩️',
+      'La barra espaciadora: la tecla más grande con el trabajo más simple. Como mi jefe 📏',
+      'Ctrl+Z: porque en la vida real no existe el "deshacer", pero acá sí 😌',
+      'El Scroll Lock es como el apéndice del teclado. Nadie sabe para qué sirve 🧠',
+      'Print Screen: la única tecla que hace capturas pero nunca fue capturada 📸',
+      'Insert: la tecla que nadie pide pero siempre está ahí. Como las visitas de tu tía 🚶',
+      'Escape: la tecla más honesta. Solo quiere irse y lo dice claramente 🏃',
+      'Si F1 es ayuda... ¿por qué nunca me ayudó con mis problemas personales? 🤔',
+      'Num Lock: porque a veces los números necesitan estar bajo llave 🔒',
+      '¿Qué le dijo F5 a la página? "Te voy a refrescar la memoria" 💨',
+      'Home y End: la pareja más distante del teclado. Siempre en extremos opuestos 💔',
+      'Tab: el introvertido del teclado. Siempre tabulando y alejando todo 😶',
+      'Windows key: la que nadie quiere apretar en medio de un juego 🎮😱',
+    ];
+    let chisteIdx = 0;
+    document.getElementById('footer-egg')?.addEventListener('click', () => {
+      alert(chistes[chisteIdx % chistes.length]);
+      chisteIdx++;
+    });
+
+    // Auto-scale keyboard to fit container
+    function scaleKeyboard() {
+      const wrap = document.querySelector('.keyboard-wrap');
+      const scaler = document.getElementById('keyboard-scaler');
+      const kb = document.getElementById('keyboard');
+      if (!wrap || !scaler || !kb) return;
+
+      // Reset scale first to measure natural size
+      scaler.style.transform = 'none';
+      scaler.style.height = 'auto';
+
+      const containerW = wrap.clientWidth - 40; // padding
+      const kbW = kb.scrollWidth;
+      const kbH = kb.scrollHeight;
+
+      if (kbW > containerW) {
+        const scale = containerW / kbW;
+        scaler.style.transform = `scale(${scale})`;
+        scaler.style.height = (kbH * scale) + 'px';
+      } else {
+        scaler.style.transform = 'none';
+        scaler.style.height = 'auto';
+      }
+    }
+
+    scaleKeyboard();
+    window.addEventListener('resize', scaleKeyboard);
+  </script>
+</body>
+
+</html>
