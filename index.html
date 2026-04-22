@@ -9,8 +9,9 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
     rel="stylesheet">
+  <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <!-- GOOGLE ADSENSE -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4650875163140628" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2844294589193199" crossorigin="anonymous"></script>
   <style>
     *,
     *::before,
@@ -66,28 +67,6 @@
       z-index: 1;
     }
 
-    .ad-sidebar {
-      width: 160px;
-      flex-shrink: 0;
-    }
-
-    .ad-sidebar-slot {
-      width: 160px;
-      min-height: 600px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text3);
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      position: sticky;
-      top: 1rem;
-    }
-
     .page {
       position: relative;
       z-index: 1;
@@ -96,48 +75,7 @@
       padding: 1rem 1rem 3rem;
     }
 
-    .ad-banner {
-      width: 100%;
-      min-height: 90px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text3);
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1.25rem;
-    }
 
-    .ad-banner-bottom {
-      margin-top: 1.5rem;
-      margin-bottom: 0;
-    }
-
-    .ad-inline {
-      width: 100%;
-      min-height: 90px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--text3);
-      font-size: 0.6rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: 1.25rem;
-    }
-
-    @media (max-width: 1200px) {
-      .ad-sidebar {
-        display: none;
-      }
-    }
 
     /* Header */
     header {
@@ -866,25 +804,8 @@
 </head>
 
 <body>
-  <!-- Top Ad Banner -->
   <div class="page-wrapper">
-    <aside class="ad-sidebar">
-      <!-- GOOGLE ADSENSE: Sidebar izquierdo 160x600 -->
-      <!-- Reemplazá este div con tu código de AdSense -->
-      <div class="ad-sidebar-slot" id="ad-sidebar-left">
-        <!-- <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        Ad 160×600
-      </div>
-    </aside>
     <div class="page">
-
-      <!-- GOOGLE ADSENSE: Banner superior 728x90 -->
-      <div class="ad-banner" id="ad-top-banner">
-        <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        Ad 728×90
-      </div>
 
       <!-- Typing Display (arriba de todo) -->
       <div class="typing-display" id="typing-display" style="margin-bottom:1rem;">
@@ -974,14 +895,6 @@
           <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
         </div>
         <div class="progress-label" id="progress-label">0 / 104 teclas testeadas</div>
-      </div>
-
-      <!-- Inline Ad -->
-      <!-- GOOGLE ADSENSE: Banner inline 728x90 -->
-      <div class="ad-inline" id="ad-inline">
-        <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        Ad 728×90
       </div>
 
       <!-- Keyboard -->
@@ -1189,13 +1102,6 @@
       </div>
 
 
-      <!-- GOOGLE ADSENSE: Banner inferior 728x90 -->
-      <div class="ad-banner ad-banner-bottom" id="ad-bottom-banner">
-        <!-- <ins class="adsbygoogle" style="display:inline-block;width:728px;height:90px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        Ad 728×90
-      </div>
-
       <footer>
         <span>KeyTest — Tester de teclado profesional · Ningún dato es enviado a servidores</span>
         <br><span id="footer-egg" style="cursor:pointer;opacity:0.3;font-size:0.55rem"
@@ -1207,14 +1113,6 @@
       <!-- P.P.P.D: Ese mail no existe. Como mi vida social. -->
       <div class="secret-pixel" title="..."></div>
     </div>
-    <aside class="ad-sidebar">
-      <!-- GOOGLE ADSENSE: Sidebar derecho 160x600 -->
-      <div class="ad-sidebar-slot" id="ad-sidebar-right">
-        <!-- <ins class="adsbygoogle" style="display:inline-block;width:160px;height:600px" data-ad-client="ca-pub-XXXXXXXXXXXXXXXX" data-ad-slot="XXXXXXXXXX"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script> -->
-        Ad 160×600
-      </div>
-    </aside>
   </div>
 
   <script>
