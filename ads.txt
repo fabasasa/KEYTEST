@@ -1,0 +1,25 @@
+# ==============================================================================
+# KEYTEST - Authorized Digital Sellers (ads.txt)
+# ==============================================================================
+# Este archivo sigue la especificación ads.txt de IAB Tech Lab.
+# Ayuda a proteger el inventario de anuncios contra el fraude y asegura 
+# que las compras se realicen a través de canales autorizados.
+# ==============================================================================
+
+# Información de contacto (Recomendado para validación y soporte)
+# Reemplaza con tu correo real de administrador/contacto
+contact=admin@tusitio.com
+
+# ==============================================================================
+# REDES PUBLICITARIAS AUTORIZADAS
+# ==============================================================================
+# Formato: <Dominio del Sistema Publicitario>, <ID de Cuenta del Editor>, <Tipo>, <ID de la Autoridad de Certificación>
+
+# --- GOOGLE ADSENSE ---
+google.com, pub-2844294589193199, DIRECT, f08c47fec0942fa0
+
+# ==============================================================================
+# Notas para escalar en el futuro (Header Bidding / Otras Redes):
+# Si integras otras redes publicitarias (como Amazon, Index Exchange, Rubicon, etc.),
+# añade sus líneas debajo siguiendo exactamente las instrucciones que te provean.
+# ==============================================================================
