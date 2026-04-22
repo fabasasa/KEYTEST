@@ -4,14 +4,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KeyTest — Tester de Teclado Profesional</title>
-  <meta name="description" content="Herramienta profesional para testear todas las teclas de tu teclado.">
+  <!-- SEO Avanzado Nivel Posgrado -->
+  <title>KeyTest — Tester de Teclado Online Gratis | Prueba de Ghosting y WPM</title>
+  <meta name="description"
+    content="¿Tu teclado falla? Usa nuestro tester de teclado online gratuito para detectar teclas rotas, hacer pruebas de ghosting (Rollover) y medir WPM. ¡Sin instalar nada y 100% seguro!">
+  <meta name="keywords"
+    content="tester de teclado, keyboard tester, prueba de teclado, testear teclado, probar teclado online, verificar teclas, keyboard test, ghosting test, teclado roto, n-key rollover, wpm test">
+  <meta name="author" content="KeyTest">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <link rel="canonical" href="https://keytest-steel.vercel.app/">
+  <meta name="theme-color" content="#1b1c20">
+
+  <!-- Open Graph / Redes Sociales -->
+  <meta property="og:site_name" content="KeyTest">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="KeyTest — Tester de Teclado Online Gratis | Prueba de Ghosting">
+  <meta property="og:description"
+    content="¿Tu teclado falla? Usa nuestro probador de teclado online gratuito para detectar teclas rotas y hacer pruebas de ghosting. ¡Rápido y sin descargas!">
+  <meta property="og:url" content="https://keytest-steel.vercel.app/">
+  <meta property="og:locale" content="es_ES">
+  <meta property="og:image" content="https://keytest-steel.vercel.app/og-image.jpg">
+  <meta property="og:image:alt" content="Interfaz de KeyTest probando un teclado mecánico">
+
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="KeyTest — Tester de Teclado Online Gratis">
+  <meta name="twitter:description"
+    content="Descubre al instante si alguna tecla te falla con nuestro probador interactivo de teclado. Prueba de Ghosting, Rollover y teclas rotas.">
+  <meta name="twitter:image" content="https://keytest-steel.vercel.app/twitter-image.jpg">
+
+  <!-- Schema.org Avanzado (SoftwareApplication, WebPage, FAQPage) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "KeyTest - Tester de Teclado",
+        "url": "https://keytest-steel.vercel.app/",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Windows, macOS, Linux, ChromeOS",
+        "browserRequirements": "Requires JavaScript",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "description": "Herramienta web profesional y gratuita para probar el funcionamiento de teclados, detectar teclas rotas y verificar el N-Key Rollover (Ghosting).",
+        "featureList": "Detección de pulsaciones simultáneas (Ghosting), Cálculo de WPM en tiempo real, Historial de teclas pulsadas, Modo oscuro"
+      },
+      {
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "¿Qué es un tester de teclado (Keyboard Tester)?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Un tester de teclado es una herramienta online que te permite verificar si todas las teclas de tu teclado físico funcionan correctamente. Al presionar una tecla, esta se ilumina en la pantalla, confirmando que la señal fue registrada correctamente."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Cómo saber si mi teclado tiene Ghosting?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Para comprobar el ghosting, mantén presionadas múltiples teclas simultáneamente (como ASDW o Shift+Espacio+Flechas). Si algunas teclas no se registran en pantalla, tu teclado tiene limitaciones de Rollover o padece de ghosting."
+            }
+          },
+          {
+            "@type": "Question",
+            "name": "¿Es seguro usar este tester de teclado online?",
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "Sí, 100% seguro. Nuestro KeyTest funciona íntegramente en tu navegador. Ningún dato, pulsación de tecla o información personal es enviada a servidores externos."
+            }
+          }
+        ]
+      }
+    ]
+  }
+  </script>
+
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
     rel="stylesheet">
   <link rel="icon" href="../favicon.ico" type="image/x-icon">
   <!-- GOOGLE ADSENSE -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2844294589193199" crossorigin="anonymous"></script>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2844294589193199"
+    crossorigin="anonymous"></script>
   <style>
     *,
     *::before,
@@ -800,6 +881,59 @@
       margin-left: 6px;
       color: var(--accent);
     }
+
+    /* SEO Content Section */
+    .seo-article {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      margin-bottom: 1.75rem;
+      line-height: 1.6;
+    }
+
+    .seo-article h2 {
+      color: var(--accent);
+      font-size: 1.3rem;
+      margin-top: 1.5rem;
+      margin-bottom: 0.8rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+    }
+
+    .seo-article h2:first-child {
+      margin-top: 0;
+    }
+
+    .seo-article h3 {
+      color: var(--text);
+      font-size: 1.05rem;
+      margin-top: 1.2rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .seo-article p {
+      color: var(--text2);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+
+    .seo-article ul {
+      color: var(--text2);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      padding-left: 1.5rem;
+    }
+
+    .seo-article li {
+      margin-bottom: 0.4rem;
+    }
+
+    .seo-article strong {
+      color: var(--text);
+      font-weight: 600;
+    }
   </style>
 </head>
 
@@ -815,7 +949,7 @@
 
       <header>
         <div class="logo">
-          <span class="logo-name">KeyTest</span>
+          <h1 class="logo-name" style="margin:0; padding:0; line-height:1;">KeyTest</h1>
           <span class="logo-tag">v2.0</span>
         </div>
         <div class="header-actions">
@@ -1102,6 +1236,58 @@
       </div>
 
 
+      <!-- SEO Content / Guía de Uso -->
+      <article class="seo-article" itemscope itemtype="https://schema.org/Article">
+        <h2 itemprop="headline">Keyboard Tester: La guía definitiva para probar tu teclado</h2>
+        <p itemprop="description">Bienvenido a <strong>KeyTest</strong>, la herramienta online gratuita más completa
+          para verificar el estado de tu teclado. Ya seas un gamer competitivo, un programador o alguien que trabaja en
+          la oficina, tener un teclado en perfectas condiciones es fundamental. Nuestro <strong>probador de teclado
+            online</strong> te permite detectar fallos al instante sin necesidad de instalar software adicional.</p>
+
+        <h2>¿Por qué deberías testear tu teclado?</h2>
+        <p>Los teclados, especialmente los mecánicos y de laptops, están sujetos a desgaste por el uso diario, polvo y
+          accidentes (como derrames de líquidos). Realizar una prueba de teclado o <em>keyboard test</em> periódicamente
+          te ayuda a identificar problemas como:</p>
+        <ul>
+          <li><strong>Teclas rotas o "Dead Keys":</strong> Teclas que no registran la pulsación física.</li>
+          <li><strong>Chattering (Doble pulsación):</strong> Cuando presionas una tecla una vez pero se registra
+            múltiples veces.</li>
+          <li><strong>Problemas de latencia:</strong> Retraso entre la pulsación y la aparición en pantalla.</li>
+        </ul>
+
+        <h2>¿Qué es el Ghosting en Teclados y el N-Key Rollover (NKRO)?</h2>
+        <p>El <strong>Ghosting</strong> ocurre cuando al presionar múltiples teclas simultáneamente, el teclado no es
+          capaz de registrar algunas de ellas, o peor aún, registra una tecla "fantasma" que no presionaste. Esto es
+          crítico para los gamers.</p>
+        <p>Gracias a nuestra función de <strong style="color:var(--accent);">Teclas mantenidas ahora mismo</strong>,
+          puedes realizar una prueba de <strong>N-Key Rollover</strong>. Simplemente presiona varias teclas al mismo
+          tiempo (ej: WASD + Shift + Espacio) y verifica si todas aparecen iluminadas en la pantalla. Si tu teclado
+          tiene "6-Key Rollover", solo registrará un máximo de 6 pulsaciones simultáneas.</p>
+
+        <h2>¿Cómo usar nuestra herramienta?</h2>
+        <p>Es muy sencillo y seguro (todo se procesa en tu navegador local):</p>
+        <ol style="color:var(--text2); font-size:0.85rem; padding-left:1.5rem; margin-bottom:1rem;">
+          <li style="margin-bottom:0.4rem;">Presiona las teclas de tu teclado físico de manera secuencial o simultánea.
+          </li>
+          <li style="margin-bottom:0.4rem;">Observa el <strong>teclado virtual interactivo</strong>; las teclas se
+            iluminarán de color verde para indicar que han sido testeadas con éxito.</li>
+          <li style="margin-bottom:0.4rem;">Revisa el panel de "Historial de pulsaciones" para confirmar códigos exactos
+            (Key, Code, KeyCode).</li>
+          <li style="margin-bottom:0.4rem;">Al finalizar, puedes usar el botón de <strong style="color:var(--text);">⬇
+              Exportar</strong> para guardar un reporte detallado en tu computadora.</li>
+        </ol>
+
+        <h2>Preguntas Frecuentes (FAQ)</h2>
+        <h3>¿Este tester funciona en Mac y Windows?</h3>
+        <p>Sí, nuestro tester de teclado es universal. Detectará correctamente comandos de Windows (Win) y de macOS
+          (Command/Meta), así como teclas específicas de laptops.</p>
+
+        <h3>¿Mi información es privada?</h3>
+        <p>Absolutamente. <strong>KeyTest</strong> funciona 100% en el lado del cliente (Client-side) mediante
+          JavaScript. No guardamos tus registros, no tenemos bases de datos y no enviamos lo que escribes a ningún
+          servidor. Tu privacidad está garantizada.</p>
+      </article>
+
       <footer>
         <span>KeyTest — Tester de teclado profesional · Ningún dato es enviado a servidores</span>
         <br><span id="footer-egg" style="cursor:pointer;opacity:0.3;font-size:0.55rem"
@@ -1116,8 +1302,10 @@
   </div>
 
   <!-- Miracle Overlay for Jesus Easter Egg -->
-  <div id="miracle-overlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
-    <img src="jesus.gif" alt="It's a miracle" style="max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 0 50px rgba(78,201,144,0.6); animation: chipIn 0.3s ease;">
+  <div id="miracle-overlay"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(5px);">
+    <img src="jesus.gif" alt="It's a miracle"
+      style="max-width:90%; max-height:90%; border-radius:12px; box-shadow:0 0 50px rgba(78,201,144,0.6); animation: chipIn 0.3s ease;">
   </div>
 
   <script>
